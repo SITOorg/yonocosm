@@ -6,22 +6,25 @@ body {
 	display: inline-block;
 	width: 75px;
 	height: 75px;
-	background-size: 150px;
+	background-size: 200%;
 	padding: 0;
 	margin: 0;
 }
-.nw .lvl_quad {
-	background-position: 0 0;
-}
 .ne .lvl_quad {
-	background-position: 75px 0;
+	background-position: 100% 0;
 }
 .sw .lvl_quad {
-	background-position: 0 75px
+	background-position: 0 100%;
 }
 .se .lvl_quad {
-	background-position: 75px 75px;
+	background-position: 100% 100%;
 }
+
+/*smaller squares*/
+/*.lvl_quad {
+	width: 50px;
+	height: 50px;
+}*/
 
 .quadgrid {
 	display: inline-block;

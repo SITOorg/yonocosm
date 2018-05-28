@@ -1,8 +1,9 @@
 let YONOCOSM = function(){
 	var levels = ["0001","0002","0003","0004","0005","0006","0007","0008","0009","0010","0011","0012",
-					"0013","0014","0015","0016","0017","0018","0019","0020"],//,"0021","0022","0023"], // filename/ids
+					"0013","0014","0015","0016","0017","0018","0019","0020","0021","0022"],//,"0023"], // filename/ids
 		qGridSize = 5, // quadrant grid size/dept
-		setPath = "./set_og/";
+		setPath = "./set_og/",
+		animDelay = 2000;
 
 	let init = function(io) {
 		if (io) {
@@ -111,9 +112,9 @@ let YONOCOSM = function(){
 				if (isLast) {
 					setTimeout(function(){
 						displaySlideshowOfLevels();
-					}, 1000);
+					}, animDelay * 5);
 				}
-			}, i * 1000);
+			}, i * animDelay);
 		}
 	};
 
