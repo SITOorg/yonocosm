@@ -1,0 +1,38 @@
+body {
+	background-color: grey;
+	padding: 0 2em;
+}
+.lvl_quad {
+	display: inline-block;
+	width: 75px;
+	height: 75px;
+	background-size: 150px;
+	padding: 0;
+	margin: 0;
+}
+.nw .lvl_quad {
+	background-position: 0 0;
+}
+.ne .lvl_quad {
+	background-position: 75px 0;
+}
+.sw .lvl_quad {
+	background-position: 0 75px
+}
+.se .lvl_quad {
+	background-position: 75px 75px;
+}
+
+.quadgrid {
+	display: inline-block;
+}
+.quadsholder {
+	border: 1px dotted white;
+	background-color: rgba(0,0,0,0.25);
+	display: inline-block;
+}
+.slideshowholder {
+	display: inline-block;
+	margin: 0 300px;
+	white-space: nowrap;
+}
