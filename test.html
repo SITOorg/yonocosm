@@ -10,11 +10,19 @@
 </head>
 <body>
 	<h1>Yonocosm</h1>
+	<button id="slideshow_button">Slideshow</button>
+	<button id="levellist_button">List of Levels</button>
 	<script>
 		$(function(){
-			YONOCOSM.init({"qGridSize":7});
-			YONOCOSM.displayListOfLevels(22,5);
-			//YONOCOSM.displaySlideshowOfLevels();
+			YONOCOSM.init({"displayDepth":5});
+			$("#slideshow_button").on("click", function(){
+				$(".levellistholder").remove();
+				YONOCOSM.displaySlideshowOfLevels();
+			});
+			$("#levellist_button").on("click", function(){
+				$(".slideshowholder").remove();
+				YONOCOSM.displayListOfLevels();
+			})
 		});
 	</script>
 </body>

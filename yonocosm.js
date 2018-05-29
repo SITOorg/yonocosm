@@ -1,23 +1,27 @@
 let YONOCOSM = function(){
-	var levels = ["0001","0002","0003","0004","0005","0006","0007","0008","0009","0010","0011","0012",
-					"0013","0014","0015","0016","0017","0018","0019","0020","0021","0022","0023",
-					"0024","0025"], // filename/ids
-		qGridSize = 5, // quadrant grid size/dept
+	var levels,
+		topLevel = 26,
+		displayDepth = 5, // quadrant grid size/dept
 		setPath = "./set_og/",
 		animDelay = 2000;
 
 	let init = function(io) {
 		if (io) {
-			levels = io["levels"] || levels;
-			qGridSize = io["qGridSize"] || qGridSize;
+			topLevel = io["topLevel"] || topLevel;
+			displayDepth = io["displayDepth"] || displayDepth;
 			setPath = io["setPath"] || setPath;
+		}
+
+		levels = [];
+		for (var i = 0; i < topLevel; i++){
+			levels.push(getPieceIdFromInt(i+1));
 		}
 	};
 
 	let makeDisplayMap = function(li) { // give level index
 		let qSe = makeBlankQuadrant();
-		for (let x = 0; x < qGridSize; x++) {
-			for (let y = 0; y < qGridSize; y++) {
+		for (let x = 0; x < displayDepth; x++) {
+			for (let y = 0; y < displayDepth; y++) {
 				let idxForCoord = li - (x + y);
 				if (idxForCoord >= 0) {
 					qSe[x][y] = levels[idxForCoord];
@@ -30,10 +34,10 @@ let YONOCOSM = function(){
 		let qSw = makeBlankQuadrant(),
 		qNw = makeBlankQuadrant(),
 		qNe = makeBlankQuadrant(),
-		qGridExt = qGridSize - 1;
+		qGridExt = displayDepth - 1;
 
-		for (let x = 0; x < qGridSize; x++) {
-			for (let y = 0; y < qGridSize; y++) {
+		for (let x = 0; x < displayDepth; x++) {
+			for (let y = 0; y < displayDepth; y++) {
 				let qSeXY = qSe[x][y];
 				qSw[qGridExt - x][y] = qSeXY;
 				qNw[qGridExt - x][qGridExt - y] = qSeXY;
@@ -46,9 +50,9 @@ let YONOCOSM = function(){
 
 	let makeBlankQuadrant = function() {
 		let tempQuad = [];
-		for (let x = 0; x < qGridSize; x++) {
+		for (let x = 0; x < displayDepth; x++) {
 			let tempCol = [];
-			for (let y = 0; y < qGridSize; y++) {
+			for (let y = 0; y < displayDepth; y++) {
 				tempCol.push(null);
 			}
 			tempQuad.push(tempCol);
@@ -75,17 +79,16 @@ let YONOCOSM = function(){
 
 	let displayListOfLevels = function(offset, count) {
 		offset = offset || 0;
-		count = count || (levels.length - 1);
+		count = count || levels.length - offset;
 		let $holder = $("<div class='levellistholder'>");
 		$holder.appendTo($("body"));
 		for (let i = 0; i < count; i++) {
 			let lvlOffset = offset + i;
-			
-
 			let $section = $("<section>"),
 			$headline = $("<h1>"),
 			$quadsholder = $("<div class='quadsholder'>");
 			$section.prop("id", "lvl_" + lvlOffset);
+			$section.addClass("levelviewholder");
 			$headline.text("Level " + lvlOffset);
 			$section.append($headline).append($quadsholder);
 
@@ -135,6 +138,18 @@ let YONOCOSM = function(){
 				$(this).css("background-image", "url('" + setPath + tpid + ".png')");
 			}
 		});
+	};
+
+	let getPieceIdFromInt = function(i) {
+		let intstring = i;
+		if (i < 10) {
+			intstring = "000" + i;
+		} else if (i < 100) {
+			intstring = "00" + i;
+		} else if (i < 1000) {
+			intstring = "0" + i;
+		}
+		return intstring;
 	};
 
 	return {
