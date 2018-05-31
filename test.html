@@ -18,11 +18,11 @@
 		$(function(){
 			YONOCOSM.init({"displayDepth":4, "topLevel":29});
 			$("#slideshow_button").on("click", function(){
-				$(".levellistholder").remove();
+				YONOCOSM.clearAllViews();
 				YONOCOSM.displaySlideshowOfLevels();
 			});
 			$("#levellist_button").on("click", function(){
-				$(".slideshowholder").remove();
+				YONOCOSM.clearAllViews();
 				YONOCOSM.displayListOfLevels(1,29);
 			})
 		});

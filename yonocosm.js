@@ -3,7 +3,8 @@ let YONOCOSM = function(){
 		topLevel = 26,
 		displayDepth = 5, // quadrant grid size/dept
 		setPath = "./set_og/",
-		animDelay = 2000;
+		animDelay = 2000,
+		ssTimeout;
 
 	let init = function(io) {
 		if (io) {
@@ -109,12 +110,12 @@ let YONOCOSM = function(){
 		for (let i = 0; i < levels.length; i++) {
 			let level = i,
 				isLast = (i == levels.length - 1);
-			setTimeout(function(){
+			ssTimeout = setTimeout(function(){
 				$holder.empty();
 				generateLevelView($holder, level);
 				syncBgImagesToData();
 				if (isLast) {
-					setTimeout(function(){
+					ssTimeout = setTimeout(function(){
 						displaySlideshowOfLevels();
 					}, animDelay * 5);
 				}
@@ -152,9 +153,16 @@ let YONOCOSM = function(){
 		return intstring;
 	};
 
+	let clearAllViews = function() {
+		clearTimeout(ssTimeout);
+		$(".slideshowholder").remove();
+		$(".levellistholder").remove();
+	}
+
 	return {
 		"init": init,
 		"displayListOfLevels": displayListOfLevels,
-		"displaySlideshowOfLevels": displaySlideshowOfLevels
+		"displaySlideshowOfLevels": displaySlideshowOfLevels,
+		"clearAllViews": clearAllViews
 	};
 }();
