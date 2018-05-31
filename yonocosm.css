@@ -38,9 +38,16 @@ body {
 	display: inline-block;
 	margin: 0 300px;
 	white-space: nowrap;
+	vertical-align: top;
 }
 
 .levelviewholder {
 	display: inline-block;
 	margin: 5px;
+	vertical-align: top;
+}
+
+#buttonholder {
+	display: inline-block;
+	vertical-align: top;
 }

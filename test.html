@@ -10,18 +10,20 @@
 </head>
 <body>
 	<h1>Yonocosm</h1>
-	<button id="slideshow_button">Slideshow</button>
-	<button id="levellist_button">List of Levels</button>
+	<div id="buttonholder">
+		<button id="slideshow_button">Slideshow</button>
+		<button id="levellist_button">List of Levels</button>
+	</div>
 	<script>
 		$(function(){
-			YONOCOSM.init({"displayDepth":5});
+			YONOCOSM.init({"displayDepth":4, "topLevel":29});
 			$("#slideshow_button").on("click", function(){
 				$(".levellistholder").remove();
 				YONOCOSM.displaySlideshowOfLevels();
 			});
 			$("#levellist_button").on("click", function(){
 				$(".slideshowholder").remove();
-				YONOCOSM.displayListOfLevels();
+				YONOCOSM.displayListOfLevels(1,29);
 			})
 		});
 	</script>
