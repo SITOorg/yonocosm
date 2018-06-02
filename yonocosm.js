@@ -3,7 +3,7 @@ let YONOCOSM = function(){
 		topLevel = 26,
 		displayDepth = 5, // quadrant grid size/dept
 		setPath = "./set_og/",
-		animDelay = 2000,
+		animDelay = 500,
 		ssTimeout;
 
 	let init = function(io) {
