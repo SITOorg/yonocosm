@@ -33,7 +33,10 @@ body {
 	background-color: rgba(0,0,0,0.25);
 	display: inline-block;
 	border: 2px solid black;
+	white-space: nowrap;
+	max-width: 100%;
 }
+
 .slideshowholder {
 	display: inline-block;
 	margin: 0 300px;
