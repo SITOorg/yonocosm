@@ -16,14 +16,14 @@
 	</div>
 	<script>
 		$(function(){
-			YONOCOSM.init({"displayDepth":4, "topLevel":38});
+			YONOCOSM.init({"displayDepth":6, "topLevel":43});
 			$("#slideshow_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displaySlideshowOfLevels();
 			});
 			$("#levellist_button").on("click", function(){
 				YONOCOSM.clearAllViews();
-				YONOCOSM.displayListOfLevels(0,39);
+				YONOCOSM.displayListOfLevels(); //(39,8);
 			})
 		});
 	</script>

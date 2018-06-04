@@ -33,9 +33,9 @@ let YONOCOSM = function(){
 		}
 		// now create mirrors of qSe
 		let qSw = makeBlankQuadrant(),
-		qNw = makeBlankQuadrant(),
-		qNe = makeBlankQuadrant(),
-		qGridExt = displayDepth - 1;
+			qNw = makeBlankQuadrant(),
+			qNe = makeBlankQuadrant(),
+			qGridExt = displayDepth - 1;
 
 		for (let x = 0; x < displayDepth; x++) {
 			for (let y = 0; y < displayDepth; y++) {
