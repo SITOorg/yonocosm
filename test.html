@@ -13,10 +13,11 @@
 	<div id="buttonholder">
 		<button id="slideshow_button">Slideshow</button>
 		<button id="levellist_button">List of Levels</button>
+		<button id="piecelist_button">List of Pieces</button>
 	</div>
 	<script>
 		$(function(){
-			YONOCOSM.init({"displayDepth":6, "topLevel":43});
+			YONOCOSM.init({"displayDepth":5, "setId":"set_og"});
 			$("#slideshow_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displaySlideshowOfLevels();
@@ -24,7 +25,11 @@
 			$("#levellist_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displayListOfLevels(); //(39,8);
-			})
+			});
+			$("#piecelist_button").on("click", function(){
+				YONOCOSM.clearAllViews();
+				YONOCOSM.displayListOfPieces();
+			});
 		});
 	</script>
 </body>

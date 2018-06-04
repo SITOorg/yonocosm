@@ -47,6 +47,10 @@ body {
 	vertical-align: top;
 }
 
+.piecelistholder img {
+	margin: 1em;
+}
+
 #buttonholder {
 	display: inline-block;
 	vertical-align: top;

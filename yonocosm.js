@@ -1,22 +1,34 @@
-let YONOCOSM = function(){
-	var levels,
-		topLevel = 26,
+var YONOCOSM = function(){
+	let levels,
+		topLevel,
 		displayDepth = 5, // quadrant grid size/dept
-		setPath = "./set_og/",
+		setId = "set_og",
 		animDelay = 500,
-		ssTimeout;
+		ssTimeout,
+		sets = {
+			"set_og": {
+				"topLevel": 43,
+				"dimensions": 150
+			}
+		};
 
 	let init = function(io) {
 		if (io) {
-			topLevel = io["topLevel"] || topLevel;
 			displayDepth = io["displayDepth"] || displayDepth;
-			setPath = io["setPath"] || setPath;
+			setId = io["setId"] || setId;
 		}
 
-		levels = [];
-		for (var i = 0; i < topLevel; i++){
-			levels.push(getPieceIdFromInt(i+1));
+		setPath = "./" + setId + "/";
+		topLevel = sets[setId].topLevel;
+		levels = getLevelsArray(topLevel);
+	};
+
+	let getLevelsArray = function(tl) {
+		let la = [];
+		for (let i = 0; i < tl; i++){
+			la.push(getPieceIdFromInt(i+1));
 		}
+		return la;
 	};
 
 	let makeDisplayMap = function(li) { // give level index
@@ -123,6 +135,21 @@ let YONOCOSM = function(){
 		}
 	};
 
+	let displayListOfPieces = function(offset, count) {
+		let $holder;
+		if ($(".piecelistholder").length > 0) {
+			$holder = $(".piecelistholder");
+		} else {
+			$holder = $("<section class='piecelistholder'>").appendTo($("body"));
+		}
+
+		let len = levels.length;
+		for (let i = 0; i < len; i++) {
+			let tpid = levels[i];
+			$holder.append($("<img src='" + setPath + tpid + ".png' title='" + tpid + "'>"));
+		}
+	}
+
 	let generateLevelView = function($holder, level) {
 		let quadrantsMap = makeDisplayMap(level);
 		let $quadNw = makeQuadrantElement("nw", quadrantsMap.nw),
@@ -157,12 +184,14 @@ let YONOCOSM = function(){
 		clearTimeout(ssTimeout);
 		$(".slideshowholder").remove();
 		$(".levellistholder").remove();
+		$(".piecelistholder").remove();
 	}
 
 	return {
 		"init": init,
 		"displayListOfLevels": displayListOfLevels,
 		"displaySlideshowOfLevels": displaySlideshowOfLevels,
-		"clearAllViews": clearAllViews
+		"clearAllViews": clearAllViews,
+		"displayListOfPieces": displayListOfPieces
 	};
 }();
