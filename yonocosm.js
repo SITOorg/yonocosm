@@ -5,12 +5,7 @@ var YONOCOSM = function(){
 		setId = "set_og",
 		animDelay = 500,
 		ssTimeout,
-		sets = {
-			"set_og": {
-				"topLevel": 43,
-				"dimensions": 150
-			}
-		};
+		sets = {};
 
 	let init = function(io) {
 		if (io) {
@@ -21,6 +16,10 @@ var YONOCOSM = function(){
 		setPath = "./" + setId + "/";
 		topLevel = sets[setId].topLevel;
 		levels = getLevelsArray(topLevel);
+	};
+
+	let addSet = function(setId, setObject) {
+		sets[setId] = setObject;
 	};
 
 	let getLevelsArray = function(tl) {
@@ -192,6 +191,7 @@ var YONOCOSM = function(){
 		"displayListOfLevels": displayListOfLevels,
 		"displaySlideshowOfLevels": displaySlideshowOfLevels,
 		"clearAllViews": clearAllViews,
-		"displayListOfPieces": displayListOfPieces
+		"displayListOfPieces": displayListOfPieces,
+		"addSet": addSet
 	};
 }();

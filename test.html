@@ -17,6 +17,7 @@
 	</div>
 	<script>
 		$(function(){
+			YONOCOSM.addSet("set_og",{"topLevel": 49,"dimensions": 150});
 			YONOCOSM.init({"displayDepth":5, "setId":"set_og"});
 			$("#slideshow_button").on("click", function(){
 				YONOCOSM.clearAllViews();
@@ -24,7 +25,8 @@
 			});
 			$("#levellist_button").on("click", function(){
 				YONOCOSM.clearAllViews();
-				YONOCOSM.displayListOfLevels(); //(39,8);
+				YONOCOSM.displayListOfLevels();
+				//YONOCOSM.displayListOfLevels(42,8);
 			});
 			$("#piecelist_button").on("click", function(){
 				YONOCOSM.clearAllViews();
