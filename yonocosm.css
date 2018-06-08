@@ -34,7 +34,6 @@ body {
 	display: inline-block;
 	border: 2px solid black;
 	white-space: nowrap;
-	max-width: 100%;
 }
 
 .slideshowholder {
