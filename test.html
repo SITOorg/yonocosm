@@ -13,8 +13,9 @@
 	<h1>Yonocosm</h1>
 	<div id="buttonholder">
 		<button id="slideshow_button">Slideshow</button>
-		<button id="levellist_button">List of Levels</button>
-		<button id="piecelist_button">List of Pieces</button>
+		<button id="lastlevels_button">Recent Levels</button>
+		<button id="levellist_button">All Levels</button>
+		<button id="piecelist_button">All Pieces</button>
 	</div>
 	<script>
 		$(function(){
@@ -27,12 +28,15 @@
 			$("#levellist_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displayListOfLevels();
-				//YONOCOSM.displayListOfLevels(54,5);
 			});
 			$("#piecelist_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displayListOfPieces();
 			});
+			$("#lastlevels_button").on("click", function(){
+				YONOCOSM.clearAllViews();
+				YONOCOSM.displayRecentLevels();
+			})
 		});
 	</script>
 </body>
