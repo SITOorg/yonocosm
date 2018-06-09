@@ -54,6 +54,8 @@ body {
 }
 
 #buttonholder {
-	display: inline-block;
-	vertical-align: top;
+	display: block;
+	border-bottom: 1px dotted white;
+	padding-bottom: 1em;
+	margin: 1em 0;
 }

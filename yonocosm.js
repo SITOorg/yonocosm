@@ -147,7 +147,13 @@ var YONOCOSM = function(){
 			let tpid = levels[i];
 			$holder.append($("<img src='" + setPath + tpid + ".png' title='" + tpid + "'>"));
 		}
-	}
+	};
+
+	let displayRecentLevels = function(n) {
+		n = n || 5;
+		let offset = topLevel - n;
+		displayListOfLevels(offset,n);
+	};
 
 	let generateLevelView = function($holder, level) {
 		let quadrantsMap = makeDisplayMap(level);
@@ -192,6 +198,7 @@ var YONOCOSM = function(){
 		"displaySlideshowOfLevels": displaySlideshowOfLevels,
 		"clearAllViews": clearAllViews,
 		"displayListOfPieces": displayListOfPieces,
-		"addSet": addSet
+		"addSet": addSet,
+		"displayRecentLevels": displayRecentLevels
 	};
 }();
