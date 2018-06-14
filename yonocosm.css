@@ -45,8 +45,6 @@ body {
 }
 
 .slideshowholder {
-	display: inline-block;
-	margin: 0 300px;
 	white-space: nowrap;
 	vertical-align: top;
 }
