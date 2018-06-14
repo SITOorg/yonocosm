@@ -12,7 +12,6 @@ var YONOCOSM = function(){
 			displayDepth = io["displayDepth"] || displayDepth;
 			setId = io["setId"] || setId;
 		}
-
 		setPath = "./" + setId + "/";
 		topLevel = sets[setId].topLevel;
 		levels = getLevelsArray(topLevel);
@@ -92,7 +91,7 @@ var YONOCOSM = function(){
 	};
 
 	let displayListOfLevels = function(offset, count) {
-		offset = offset || 0;
+		offset = offset || 1;
 		count = count || levels.length - offset;
 		let $holder = $("<div class='levellistholder'>");
 		$holder.appendTo($("body"));
@@ -118,7 +117,7 @@ var YONOCOSM = function(){
 		if ($(".slideshowholder").length > 0) {
 			$holder = $(".slideshowholder");
 		} else {
-			$holder = $("<section class='slideshowholder'>").appendTo($("body"));
+			$holder = $("<section class='slideshowholder levelwrapper'>").appendTo($("body"));
 		}
 		for (let i = 0; i < levels.length; i++) {
 			let level = i,
@@ -157,7 +156,7 @@ var YONOCOSM = function(){
 	};
 
 	let displayInteractiveLevel = function() {
-		$holder = $("<section class='interactivelevel'>").appendTo($("body"));
+		$holder = $("<section class='interactivelevel levelwrapper'>").appendTo($("body"));
 		generateLevelView($holder, topLevel -1);
 		syncBgImagesToData();
 		addUiToLevel($holder);

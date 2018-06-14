@@ -1,4 +1,5 @@
 body {
+	font-family: sans-serif;
 	background-color: grey;
 	padding: 0 2em;
 }
@@ -25,7 +26,7 @@ body {
 .lvl_quad.clickable:hover,
 .lvl_quad.clickable:focus {
 	opacity: .75;
-	outline: 5px solid yellow;
+	outline: 5px solid grey;
 }
 
 /*smaller squares*/
@@ -45,7 +46,6 @@ body {
 }
 
 .slideshowholder {
-	white-space: nowrap;
 	vertical-align: top;
 }
 
@@ -55,13 +55,25 @@ body {
 	vertical-align: top;
 }
 
+.levelwrapper {
+	white-space: nowrap;
+}
+
 .piecelistholder img {
 	margin: 1em;
 }
 
 #buttonholder {
-	display: block;
-	border-bottom: 1px dotted white;
+	display: flex;
 	padding-bottom: 1em;
 	margin: 1em 0;
+	flex-wrap: wrap;
+}
+
+
+@media (max-width : 667px) {
+	body {
+		padding: 5px;
+		margin: 0;
+	}
 }
