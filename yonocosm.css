@@ -19,6 +19,14 @@ body {
 .se .lvl_quad {
 	background-position: 100% 100%;
 }
+.lvl_quad.clickable {
+	cursor: pointer;
+}
+.lvl_quad.clickable:hover,
+.lvl_quad.clickable:focus {
+	opacity: .75;
+	outline: 5px solid yellow;
+}
 
 /*smaller squares*/
 /*.lvl_quad {

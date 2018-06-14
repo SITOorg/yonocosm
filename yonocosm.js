@@ -36,7 +36,7 @@ var YONOCOSM = function(){
 			for (let y = 0; y < displayDepth; y++) {
 				let idxForCoord = li - (x + y);
 				if (idxForCoord >= 0) {
-					qSe[x][y] = levels[idxForCoord];
+					qSe[x][y] = idxForCoord;
 				} else {
 					qSe[x][y] = null;
 				}
@@ -80,7 +80,9 @@ var YONOCOSM = function(){
 			for (let x = 0; x < len; x++) {
 				let $cell = $("<div class='lvl_quad'>");
 				if (qmap[x][y]) {
-					$cell.data("pid",qmap[x][y]);
+					let depth = qmap[x][y];
+					$cell.data("pid",levels[depth]);
+					$cell.data("pdepth",depth);
 				}
 				$grid.append($cell);
 			}
@@ -122,7 +124,6 @@ var YONOCOSM = function(){
 			let level = i,
 				isLast = (i == levels.length - 1);
 			ssTimeout = setTimeout(function(){
-				$holder.empty();
 				generateLevelView($holder, level);
 				syncBgImagesToData();
 				if (isLast) {
@@ -155,13 +156,38 @@ var YONOCOSM = function(){
 		displayListOfLevels(offset,n);
 	};
 
+	let displayInteractiveLevel = function() {
+		$holder = $("<section class='interactivelevel'>").appendTo($("body"));
+		generateLevelView($holder, topLevel -1);
+		syncBgImagesToData();
+		addUiToLevel($holder);
+	};
+
 	let generateLevelView = function($holder, level) {
 		let quadrantsMap = makeDisplayMap(level);
+		$holder.empty();
+		$holder.data("toplevel", level);
 		let $quadNw = makeQuadrantElement("nw", quadrantsMap.nw),
 			$quadNe = makeQuadrantElement("ne", quadrantsMap.ne),
 			$quadSw = makeQuadrantElement("sw", quadrantsMap.sw),
 			$quadSe = makeQuadrantElement("se", quadrantsMap.se);
 		$holder.append($quadNw).append($quadNe).append($("<br>")).append($quadSw).append($quadSe);
+		return $holder;
+	};
+
+	let addUiToLevel = function($holder) {
+		// presumes data elements are in place (toplevel)
+		$holder.find(".lvl_quad").off("click").on("click", function(){
+			if ($holder.data("toplevel") == $(this).data("pdepth")) {
+				$holder = generateLevelView($holder, parseInt($(this).data("pdepth")) + 1); // expand instead
+				addUiToLevel($holder);
+			} else {
+				$holder = generateLevelView($holder, parseInt($(this).data("pdepth")));
+				addUiToLevel($holder);
+			}
+			syncBgImagesToData();
+		});
+		$holder.find(".lvl_quad").addClass("clickable");
 	};
 
 	let syncBgImagesToData = function() {
@@ -190,6 +216,7 @@ var YONOCOSM = function(){
 		$(".slideshowholder").remove();
 		$(".levellistholder").remove();
 		$(".piecelistholder").remove();
+		$(".interactivelevel").remove();
 	}
 
 	return {
@@ -199,6 +226,7 @@ var YONOCOSM = function(){
 		"clearAllViews": clearAllViews,
 		"displayListOfPieces": displayListOfPieces,
 		"addSet": addSet,
-		"displayRecentLevels": displayRecentLevels
+		"displayRecentLevels": displayRecentLevels,
+		"displayInteractiveLevel": displayInteractiveLevel
 	};
 }();

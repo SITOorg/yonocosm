@@ -12,6 +12,7 @@
 <body>
 	<h1>Yonocosm</h1>
 	<div id="buttonholder">
+		<button id="interactivelevel_button">Interactive Level</button>
 		<button id="slideshow_button">Slideshow</button>
 		<button id="lastlevels_button">Recent Levels</button>
 		<button id="levellist_button">All Levels</button>
@@ -36,6 +37,10 @@
 			$("#lastlevels_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displayRecentLevels();
+			});
+			$("#interactivelevel_button").on("click", function(){
+				YONOCOSM.clearAllViews();
+				YONOCOSM.displayInteractiveLevel();
 			})
 		});
 	</script>
