@@ -139,7 +139,7 @@ var YONOCOSM = function(){
 		// assuming all quadrants are set with offset data()
 		let d = $holder.data("depth");
 		$holder.data("level", level);
-		let maxoff = d + 1;
+		let maxoff = d * 2;
 		for (let o = 0; o <= maxoff; o++) {
 			let $cells = $holder.find(".offset_" + o);
 			$cells.data("pid", levels[level - o]).data("plevel", level - o);
@@ -169,7 +169,6 @@ var YONOCOSM = function(){
 			syncBgImagesToData();
 		});
 		$quadCells.hover(function(){ // in
-			console.log("?");
 				let thisOffset = $(this).data("offset"),
 					$siblings = $holder.find(".offset_" + thisOffset);
 				$siblings.addClass("highlightCell");
