@@ -3,7 +3,7 @@ var YONOCOSM = function(){
 		topLevel,
 		displayDepth = 5, // quadrant grid size/dept
 		setId = "set_og",
-		animDelay = 750,
+		animDelay = 2000,
 		ssTimeout,
 		sets = {},
 		quadCellClass = "quadcell";
@@ -141,10 +141,13 @@ var YONOCOSM = function(){
 		$holder.data("level", level);
 		let maxoff = d * 2;
 		for (let o = 0; o <= maxoff; o++) {
-			let $cells = $holder.find(".offset_" + o);
-			$cells.data("pid", levels[level - o]).data("plevel", level - o);
+			setTimeout(function(){
+				let $cells = $holder.find(".offset_" + o);
+				$cells.data("pid", levels[level - o]).data("plevel", level - o);
+				syncBgImagesToData();
+			},(50*o));
 		}
-		syncBgImagesToData();
+		
 	};
 
 	let generateLevelView = function(level, depth) {
