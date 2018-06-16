@@ -3,7 +3,7 @@ body {
 	background-color: grey;
 	padding: 0 2em;
 }
-.lvl_quad {
+.quadcell {
 	display: inline-block;
 	width: 75px;
 	height: 75px;
@@ -11,26 +11,24 @@ body {
 	padding: 0;
 	margin: 0;
 }
-.ne .lvl_quad {
+.quadcell.highlightCell {
+	opacity: .5;
+}
+.ne .quadcell {
 	background-position: 100% 0;
 }
-.sw .lvl_quad {
+.sw .quadcell {
 	background-position: 0 100%;
 }
-.se .lvl_quad {
+.se .quadcell {
 	background-position: 100% 100%;
 }
-.lvl_quad.clickable {
+.quadcell.clickable {
 	cursor: pointer;
-}
-.lvl_quad.clickable:hover,
-.lvl_quad.clickable:focus {
-	opacity: .75;
-	outline: 5px solid grey;
 }
 
 /*smaller squares*/
-/*.lvl_quad {
+/*.quadcell {
 	width: 30px;
 	height: 30px;
 }*/

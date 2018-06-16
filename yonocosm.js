@@ -3,9 +3,10 @@ var YONOCOSM = function(){
 		topLevel,
 		displayDepth = 5, // quadrant grid size/dept
 		setId = "set_og",
-		animDelay = 500,
+		animDelay = 750,
 		ssTimeout,
-		sets = {};
+		sets = {},
+		quadCellClass = "quadcell";
 
 	let init = function(io) {
 		if (io) {
@@ -29,10 +30,10 @@ var YONOCOSM = function(){
 		return la;
 	};
 
-	let makeDisplayMap = function(li) { // give level index
-		let qSe = makeBlankQuadrant();
-		for (let x = 0; x < displayDepth; x++) {
-			for (let y = 0; y < displayDepth; y++) {
+	let makeDisplayMap = function(li, depth) { // give level index
+		let qSe = makeBlankQuadrant(depth);
+		for (let x = 0; x < depth; x++) {
+			for (let y = 0; y < depth; y++) {
 				let idxForCoord = li - (x + y);
 				if (idxForCoord >= 0) {
 					qSe[x][y] = idxForCoord;
@@ -42,13 +43,13 @@ var YONOCOSM = function(){
 			}
 		}
 		// now create mirrors of qSe
-		let qSw = makeBlankQuadrant(),
-			qNw = makeBlankQuadrant(),
-			qNe = makeBlankQuadrant(),
-			qGridExt = displayDepth - 1;
+		let qSw = makeBlankQuadrant(depth),
+			qNw = makeBlankQuadrant(depth),
+			qNe = makeBlankQuadrant(depth),
+			qGridExt = depth - 1;
 
-		for (let x = 0; x < displayDepth; x++) {
-			for (let y = 0; y < displayDepth; y++) {
+		for (let x = 0; x < depth; x++) {
+			for (let y = 0; y < depth; y++) {
 				let qSeXY = qSe[x][y];
 				qSw[qGridExt - x][y] = qSeXY;
 				qNw[qGridExt - x][qGridExt - y] = qSeXY;
@@ -59,11 +60,11 @@ var YONOCOSM = function(){
 		return({"nw":qNw, "ne":qNe, "se":qSe, "sw":qSw});
 	};
 
-	let makeBlankQuadrant = function() {
+	let makeBlankQuadrant = function(depth) {
 		let tempQuad = [];
-		for (let x = 0; x < displayDepth; x++) {
+		for (let x = 0; x < depth; x++) {
 			let tempCol = [];
-			for (let y = 0; y < displayDepth; y++) {
+			for (let y = 0; y < depth; y++) {
 				tempCol.push(null);
 			}
 			tempQuad.push(tempCol);
@@ -71,17 +72,22 @@ var YONOCOSM = function(){
 		return tempQuad;
 	};
 
+	/** makeQuadrantElement
+		A "quadrant element" is 1/4 of the full display of a level + depth (surrrounding pieces)
+		@qlabel : label to be applied as a class (nw, ne, se, sw).
+		@qmap : the abstract map of the pieces, to be translated to HTML elements
+	*/
 	let makeQuadrantElement = function(qlabel, qmap) {
 		let len = qmap.length,
 		$grid = $("<div class='quadgrid'>");
 		$grid.addClass(qlabel);
 		for (let y = 0; y < len; y++) {
 			for (let x = 0; x < len; x++) {
-				let $cell = $("<div class='lvl_quad'>");
+				let $cell = $("<div class='" + quadCellClass + "'>");
 				if (qmap[x][y]) {
-					let depth = qmap[x][y];
-					$cell.data("pid",levels[depth]);
-					$cell.data("pdepth",depth);
+					let level = qmap[x][y];
+					$cell.data("pid",levels[level]);
+					$cell.data("plevel",level);
 				}
 				$grid.append($cell);
 			}
@@ -90,22 +96,134 @@ var YONOCOSM = function(){
 		return $grid;
 	};
 
-	let displayListOfLevels = function(offset, count) {
+	/** Make a scaffold level view to receive updates
+	**/
+	let makeLevelViewScaffold = function($holder, depth) {
+		depth = depth || displayDepth;
+		$holder = $holder || $("<div>").addClass("scaffoldholder").addClass("levelviewholder").data("depth",depth);
+		let makeQuadScaffoldElement = function(qlabel) {
+			let gridext = depth - 1,
+				$element = $("<div>").addClass("quadgrid").addClass(qlabel);
+			for (let y = 0; y < depth; y++) {
+				for (let x = 0; x < depth; x++) {
+					let offset = x + y; // se
+					
+					if (qlabel == "sw") {
+						offset = (gridext - x) + y;
+					} else if (qlabel == "nw") {
+						offset = (gridext - x) + (gridext - y);
+					} else if (qlabel == "ne") {
+						offset = x + (gridext - y);
+					}
+
+					let $cell = $("<div>").addClass(quadCellClass).addClass("offset_" + offset).data("offset", offset);
+					$element.append($cell);
+				}
+				$element.append($("<br/>"));
+			}
+			return $element;
+		};
+		let $qNw = makeQuadScaffoldElement("nw"),
+			$qNe = makeQuadScaffoldElement("ne"),
+			$qSe = makeQuadScaffoldElement("se"),
+			$qSw = makeQuadScaffoldElement("sw");
+		$holder.append($qNw).append($qNe).append($("<br/>")).append($qSw).append($qSe);
+		return $holder;
+	};
+
+	/** Use existing holder to show a new level
+		@$holder : created HTML element with all quadrants/cells
+		@level : the level to show
+	**/
+	let updateLevelView = function($holder, level) {
+		// assuming all quadrants are set with offset data()
+		let d = $holder.data("depth");
+		$holder.data("level", level);
+		let maxoff = d + 1;
+		for (let o = 0; o <= maxoff; o++) {
+			let $cells = $holder.find(".offset_" + o);
+			$cells.data("pid", levels[level - o]).data("plevel", level - o);
+		}
+		syncBgImagesToData();
+	};
+
+	let generateLevelView = function(level, depth) {
+		$holder = makeLevelViewScaffold(null, depth);
+		updateLevelView($holder, level);
+		return $holder;
+	};
+
+	let addUiToLevel = function($holder) {
+		// presumes data elements are in place (level)
+		let $quadCells = $holder.find("." + quadCellClass);
+		$quadCells.off("click").on("click", function(){
+			let ddepth = $holder.data("depth"),
+				plevel = parseInt($(this).data("plevel"));
+			if ($holder.data("level") == plevel) {
+				if (plevel != topLevel - 1) {
+					updateLevelView($holder, plevel + 1); // expand instead
+				}
+			} else {
+				updateLevelView($holder, plevel);
+			}
+			syncBgImagesToData();
+		});
+		$quadCells.hover(function(){ // in
+			console.log("?");
+				let thisOffset = $(this).data("offset"),
+					$siblings = $holder.find(".offset_" + thisOffset);
+				$siblings.addClass("highlightCell");
+			}, function() { //out 
+				$holder.find(".quadcell").removeClass("highlightCell");
+			});
+		$quadCells.addClass("clickable");
+	};
+
+	let syncBgImagesToData = function() {
+		$("." + quadCellClass).each(function(){
+			var tpid = $(this).data("pid");
+			if (tpid) {
+				$(this).css("background-image", "url('" + setPath + tpid + ".png')");
+			}
+		});
+	};
+
+	let getPieceIdFromInt = function(i) {
+		let intstring = i;
+		if (i < 10) {
+			intstring = "000" + i;
+		} else if (i < 100) {
+			intstring = "00" + i;
+		} else if (i < 1000) {
+			intstring = "0" + i;
+		}
+		return intstring;
+	};
+
+	let clearAllViews = function() {
+		clearTimeout(ssTimeout);
+		$(".slideshowholder").remove();
+		$(".levellistholder").remove();
+		$(".piecelistholder").remove();
+		$(".interactivelevel").remove();
+	};
+
+	/* user-facing modes */
+	
+	let displayListOfLevels = function(offset, count, depth) {
 		offset = offset || 1;
 		count = count || levels.length - offset;
+		depth = depth || displayDepth;
 		let $holder = $("<div class='levellistholder'>");
 		$holder.appendTo($("body"));
 		for (let i = 0; i < count; i++) {
 			let lvlOffset = offset + i;
 			let $section = $("<section>"),
-			$headline = $("<h1>"),
-			$quadsholder = $("<div class='quadsholder'>");
-			$section.prop("id", "lvl_" + lvlOffset);
-			$section.addClass("levelviewholder");
+				$headline = $("<h1>");
+			$section.prop("id", "lvl_" + lvlOffset).addClass("levelviewholder").append($headline);
 			$headline.text("Level " + lvlOffset);
-			$section.append($headline).append($quadsholder);
 
-			generateLevelView($quadsholder, lvlOffset);
+			$section.append(generateLevelView(lvlOffset, depth));
 
 			$holder.append($section);
 		}
@@ -117,14 +235,14 @@ var YONOCOSM = function(){
 		if ($(".slideshowholder").length > 0) {
 			$holder = $(".slideshowholder");
 		} else {
-			$holder = $("<section class='slideshowholder levelwrapper'>").appendTo($("body"));
+			$holder = makeLevelViewScaffold(null, displayDepth);
+			$holder.addClass("slideshowholder").appendTo($("body"));
 		}
 		for (let i = 0; i < levels.length; i++) {
 			let level = i,
 				isLast = (i == levels.length - 1);
 			ssTimeout = setTimeout(function(){
-				generateLevelView($holder, level);
-				syncBgImagesToData();
+				updateLevelView($holder, level);
 				if (isLast) {
 					ssTimeout = setTimeout(function(){
 						displaySlideshowOfLevels();
@@ -152,72 +270,18 @@ var YONOCOSM = function(){
 	let displayRecentLevels = function(n) {
 		n = n || 5;
 		let offset = topLevel - n;
-		displayListOfLevels(offset,n);
+		displayListOfLevels(offset, n, displayDepth);
 	};
 
-	let displayInteractiveLevel = function() {
-		$holder = $("<section class='interactivelevel levelwrapper'>").appendTo($("body"));
-		generateLevelView($holder, topLevel -1);
-		syncBgImagesToData();
+	let displayInteractiveLevel = function(depth) {
+		depth = depth || displayDepth;
+		let $holder = makeLevelViewScaffold(null, depth);
+		$holder.addClass("interactivelevel").appendTo($("body"));
+		updateLevelView($holder, topLevel - 1);
 		addUiToLevel($holder);
 	};
 
-	let generateLevelView = function($holder, level) {
-		let quadrantsMap = makeDisplayMap(level);
-		$holder.empty();
-		$holder.data("toplevel", level);
-		let $quadNw = makeQuadrantElement("nw", quadrantsMap.nw),
-			$quadNe = makeQuadrantElement("ne", quadrantsMap.ne),
-			$quadSw = makeQuadrantElement("sw", quadrantsMap.sw),
-			$quadSe = makeQuadrantElement("se", quadrantsMap.se);
-		$holder.append($quadNw).append($quadNe).append($("<br>")).append($quadSw).append($quadSe);
-		return $holder;
-	};
-
-	let addUiToLevel = function($holder) {
-		// presumes data elements are in place (toplevel)
-		$holder.find(".lvl_quad").off("click").on("click", function(){
-			if ($holder.data("toplevel") == $(this).data("pdepth")) {
-				$holder = generateLevelView($holder, parseInt($(this).data("pdepth")) + 1); // expand instead
-				addUiToLevel($holder);
-			} else {
-				$holder = generateLevelView($holder, parseInt($(this).data("pdepth")));
-				addUiToLevel($holder);
-			}
-			syncBgImagesToData();
-		});
-		$holder.find(".lvl_quad").addClass("clickable");
-	};
-
-	let syncBgImagesToData = function() {
-		$(".lvl_quad").each(function(){
-			var tpid = $(this).data("pid");
-			if (tpid) {
-				$(this).css("background-image", "url('" + setPath + tpid + ".png')");
-			}
-		});
-	};
-
-	let getPieceIdFromInt = function(i) {
-		let intstring = i;
-		if (i < 10) {
-			intstring = "000" + i;
-		} else if (i < 100) {
-			intstring = "00" + i;
-		} else if (i < 1000) {
-			intstring = "0" + i;
-		}
-		return intstring;
-	};
-
-	let clearAllViews = function() {
-		clearTimeout(ssTimeout);
-		$(".slideshowholder").remove();
-		$(".levellistholder").remove();
-		$(".piecelistholder").remove();
-		$(".interactivelevel").remove();
-	}
-
+	/* module-type "public" functions */
 	return {
 		"init": init,
 		"displayListOfLevels": displayListOfLevels,
