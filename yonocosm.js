@@ -32,72 +32,6 @@ var YONOCOSM = function(){
 		return la;
 	};
 
-	let makeDisplayMap = function(li, depth) { // give level index
-		let qSe = makeBlankQuadrant(depth);
-		for (let x = 0; x < depth; x++) {
-			for (let y = 0; y < depth; y++) {
-				let idxForCoord = li - (x + y);
-				if (idxForCoord >= 0) {
-					qSe[x][y] = idxForCoord;
-				} else {
-					qSe[x][y] = null;
-				}
-			}
-		}
-		// now create mirrors of qSe
-		let qSw = makeBlankQuadrant(depth),
-			qNw = makeBlankQuadrant(depth),
-			qNe = makeBlankQuadrant(depth),
-			qGridExt = depth - 1;
-
-		for (let x = 0; x < depth; x++) {
-			for (let y = 0; y < depth; y++) {
-				let qSeXY = qSe[x][y];
-				qSw[qGridExt - x][y] = qSeXY;
-				qNw[qGridExt - x][qGridExt - y] = qSeXY;
-				qNe[x][qGridExt - y] = qSeXY;
-			}
-		}
-
-		return({"nw":qNw, "ne":qNe, "se":qSe, "sw":qSw});
-	};
-
-	let makeBlankQuadrant = function(depth) {
-		let tempQuad = [];
-		for (let x = 0; x < depth; x++) {
-			let tempCol = [];
-			for (let y = 0; y < depth; y++) {
-				tempCol.push(null);
-			}
-			tempQuad.push(tempCol);
-		}
-		return tempQuad;
-	};
-
-	/** makeQuadrantElement
-		A "quadrant element" is 1/4 of the full display of a level + depth (surrrounding pieces)
-		@qlabel : label to be applied as a class (nw, ne, se, sw).
-		@qmap : the abstract map of the pieces, to be translated to HTML elements
-	*/
-	let makeQuadrantElement = function(qlabel, qmap) {
-		let len = qmap.length,
-		$grid = $("<div class='quadgrid'>");
-		$grid.addClass(qlabel);
-		for (let y = 0; y < len; y++) {
-			for (let x = 0; x < len; x++) {
-				let $cell = $("<div class='" + quadCellClass + "'>");
-				if (qmap[x][y]) {
-					let level = qmap[x][y];
-					$cell.data("pid",levels[level]);
-					$cell.data("plevel",level);
-				}
-				$grid.append($cell);
-			}
-			$grid.append($("<br>"));
-		}
-		return $grid;
-	};
-
 	/** Make a scaffold level view to receive updates
 	**/
 	let makeLevelViewScaffold = function($holder, depth) {
@@ -295,6 +229,76 @@ var YONOCOSM = function(){
 		updateLevelView($holder, topLevel - 1);
 		addUiToLevel($holder);
 	};
+
+	/* deprecated
+		let makeDisplayMap = function(li, depth) { // give level index
+			let qSe = makeBlankQuadrant(depth);
+			for (let x = 0; x < depth; x++) {
+				for (let y = 0; y < depth; y++) {
+					let idxForCoord = li - (x + y);
+					if (idxForCoord >= 0) {
+						qSe[x][y] = idxForCoord;
+					} else {
+						qSe[x][y] = null;
+					}
+				}
+			}
+			// now create mirrors of qSe
+			let qSw = makeBlankQuadrant(depth),
+				qNw = makeBlankQuadrant(depth),
+				qNe = makeBlankQuadrant(depth),
+				qGridExt = depth - 1;
+
+			for (let x = 0; x < depth; x++) {
+				for (let y = 0; y < depth; y++) {
+					let qSeXY = qSe[x][y];
+					qSw[qGridExt - x][y] = qSeXY;
+					qNw[qGridExt - x][qGridExt - y] = qSeXY;
+					qNe[x][qGridExt - y] = qSeXY;
+				}
+			}
+
+			return({"nw":qNw, "ne":qNe, "se":qSe, "sw":qSw});
+		};
+		
+
+		let makeBlankQuadrant = function(depth) {
+			let tempQuad = [];
+			for (let x = 0; x < depth; x++) {
+				let tempCol = [];
+				for (let y = 0; y < depth; y++) {
+					tempCol.push(null);
+				}
+				tempQuad.push(tempCol);
+			}
+			return tempQuad;
+		};
+		
+
+		/** makeQuadrantElement
+			A "quadrant element" is 1/4 of the full display of a level + depth (surrrounding pieces)
+			@qlabel : label to be applied as a class (nw, ne, se, sw).
+			@qmap : the abstract map of the pieces, to be translated to HTML elements
+		* /
+		let makeQuadrantElement = function(qlabel, qmap) {
+			let len = qmap.length,
+			$grid = $("<div class='quadgrid'>");
+			$grid.addClass(qlabel);
+			for (let y = 0; y < len; y++) {
+				for (let x = 0; x < len; x++) {
+					let $cell = $("<div class='" + quadCellClass + "'>");
+					if (qmap[x][y]) {
+						let level = qmap[x][y];
+						$cell.data("pid",levels[level]);
+						$cell.data("plevel",level);
+					}
+					$grid.append($cell);
+				}
+				$grid.append($("<br>"));
+			}
+			return $grid;
+		};
+	*/
 
 	/* module-type "public" functions */
 	return {
