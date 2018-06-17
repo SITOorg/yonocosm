@@ -136,18 +136,32 @@ var YONOCOSM = function(){
 		@level : the level to show
 	**/
 	let updateLevelView = function($holder, level) {
+		level = Math.max(0,level);
 		// assuming all quadrants are set with offset data()
-		let d = $holder.data("depth");
+		let d = $holder.data("depth"),
+			prevlevel = $holder.data("level");
 		$holder.data("level", level);
 		let maxoff = d * 2;
-		for (let o = 0; o <= maxoff; o++) {
-			setTimeout(function(){
-				let $cells = $holder.find(".offset_" + o);
-				$cells.data("pid", levels[level - o]).data("plevel", level - o);
-				syncBgImagesToData();
-			},(50*o));
+		if (prevlevel > level) {
+			// zoom "out"
+			let i = 0;
+			for (let o = maxoff; o >= 0; o--) {
+				setTimeout(function(){
+					let $cells = $holder.find(".offset_" + o);
+					$cells.data("pid", levels[level - o]).data("plevel", level - o);
+					syncBgImagesToData();
+				},(50*i));
+				i++;
+			}
+		} else {
+			for (let o = 0; o <= maxoff; o++) {
+				setTimeout(function(){
+					let $cells = $holder.find(".offset_" + o);
+					$cells.data("pid", levels[level - o]).data("plevel", level - o);
+					syncBgImagesToData();
+				},(50*o));
+			}
 		}
-		
 	};
 
 	let generateLevelView = function(level, depth) {
