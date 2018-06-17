@@ -6,9 +6,11 @@ var YONOCOSM = function(){
 		animDelay = 2000,
 		ssTimeout,
 		sets = {},
-		quadCellClass = "quadcell";
+		quadCellClass = "quadcell",
+		$displayHolderElement;
 
 	let init = function(io) {
+		$displayHolderElement = $("#displayholder");
 		if (io) {
 			displayDepth = io["displayDepth"] || displayDepth;
 			setId = io["setId"] || setId;
@@ -218,10 +220,7 @@ var YONOCOSM = function(){
 
 	let clearAllViews = function() {
 		clearTimeout(ssTimeout);
-		$(".slideshowholder").remove();
-		$(".levellistholder").remove();
-		$(".piecelistholder").remove();
-		$(".interactivelevel").remove();
+		$displayHolderElement.empty();
 	};
 
 	/* user-facing modes */
@@ -231,7 +230,7 @@ var YONOCOSM = function(){
 		count = count || levels.length - offset;
 		depth = depth || displayDepth;
 		let $holder = $("<div class='levellistholder'>");
-		$holder.appendTo($("body"));
+		$holder.appendTo($displayHolderElement);
 		for (let i = 0; i < count; i++) {
 			let lvlOffset = offset + i;
 			let $section = $("<section>"),
@@ -252,7 +251,7 @@ var YONOCOSM = function(){
 			$holder = $(".slideshowholder");
 		} else {
 			$holder = makeLevelViewScaffold(null, displayDepth);
-			$holder.addClass("slideshowholder").appendTo($("body"));
+			$holder.addClass("slideshowholder").appendTo($displayHolderElement);
 		}
 		for (let i = 0; i < levels.length; i++) {
 			let level = i,
@@ -273,7 +272,7 @@ var YONOCOSM = function(){
 		if ($(".piecelistholder").length > 0) {
 			$holder = $(".piecelistholder");
 		} else {
-			$holder = $("<section class='piecelistholder'>").appendTo($("body"));
+			$holder = $("<section class='piecelistholder'>").appendTo($displayHolderElement);
 		}
 
 		let len = levels.length;
@@ -292,7 +291,7 @@ var YONOCOSM = function(){
 	let displayInteractiveLevel = function(depth) {
 		depth = depth || displayDepth;
 		let $holder = makeLevelViewScaffold(null, depth);
-		$holder.addClass("interactivelevel").appendTo($("body"));
+		$holder.addClass("interactivelevel").appendTo($displayHolderElement);
 		updateLevelView($holder, topLevel - 1);
 		addUiToLevel($holder);
 	};

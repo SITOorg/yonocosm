@@ -10,14 +10,27 @@
 	<script src="yonocosm.js"></script>
 </head>
 <body>
-	<h1>Yonocosm</h1>
-	<div id="buttonholder">
+	<header>
+		<h1>Yonocosm</h1>
+	</header>
+	<section id="buttonholder">
 		<button id="interactivelevel_button">Interactive Level</button>
 		<button id="slideshow_button">Slideshow</button>
 		<button id="lastlevels_button">Recent Levels</button>
 		<button id="levellist_button">All Levels</button>
 		<button id="piecelist_button">All Pieces</button>
-	</div>
+	</section>
+	<section id="displayholder">
+	</section>
+	<section id="credits">
+		<h1>About Yonocosm</h1>
+		<p>Yonocosm is a sequence of images that fit together in a novel tiling pattern. Each image in the sequence is drawn specifically to extend the previous image by fitting into a gap created by splitting the "parent" in half horizontally as well as vertically. The results are tiled in a display that allows each quarter image to blend into its neighbors seamlessly. It could be described as an expanding nested tessellation.</p>
+		<p>The project was created and is being developed by 
+			<a href="https://twitter.com/Starstew">Ed Stastny</a> and is available as a
+			<a href="https://github.com/SITOorg/yonocosm">git repository on GitHub</a>. Yonocosm is so named because it's a combination of concepts from the <a href="//sito.org/yono">Yono</a>(splitting parent and bridging the gap) and <a href="//sito.org/synergy/gridcosm">Gridcosm</a>(focused center point) cooperative art projects.</p>
+		<p>Yonocosm may some day become a cooperative art project too. The code is being structured in a way to make it easy to slot in new sets and sizes of images.</p>
+	</section>
+
 	<script>
 		$(function(){
 			YONOCOSM.addSet("set_og",{"topLevel": 57,"dimensions": 150});
