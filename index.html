@@ -25,16 +25,33 @@
 	<section id="credits">
 		<h1>About Yonocosm</h1>
 		<p>Yonocosm is a sequence of images that fit together in a novel tiling pattern. Each image in the sequence is drawn specifically to extend the previous image by fitting into a gap created by splitting the "parent" in half horizontally as well as vertically. The results are tiled in a display that allows each quarter image to blend into its neighbors seamlessly. It could be described as an expanding nested tessellation.</p>
-		<p>The project was created and is being developed by 
-			<a href="https://twitter.com/Starstew">Ed Stastny</a> and is available as a
-			<a href="https://github.com/SITOorg/yonocosm">git repository on GitHub</a>. Yonocosm is so named because it's a combination of concepts from the <a href="//sito.org/yono">Yono</a>(splitting parent and bridging the gap) and <a href="//sito.org/synergy/gridcosm">Gridcosm</a>(focused center point) cooperative art projects.</p>
+		<p>Yonocosm was created and is being drawn and developed by 
+			<a href="https://twitter.com/Starstew">Ed Stastny</a>.
+			The name "Yonocosm" is a portmanteau of the names of the 
+			<a href="//sito.org/yono">Yono</a> and <a href="//sito.org/synergy/gridcosm">Gridcosm</a> cooperative art projects
+			on <a href="//sito.org">SITO.org</a>. "Yono" because of the splitting/filling, and "Gridcosm" due to the non-branching single point of focus.</p>
 		<p>Yonocosm may some day become a cooperative art project too. The code is being structured in a way to make it easy to slot in new sets and sizes of images.</p>
+	</section>
+	<section id="landmarks">
+		<h1>Landmarks</h1>
+		<ul>
+			<li><a href="?level=16">"It's a leaf..."</a> &ndash; first leaf</li>
+			<li><a href="?level=28">UWI</a> &ndash; SITO co-inspirator</li>
+			<li><a href="?level=58">Rex</a> &ndash; Ed's Dad</li>
+			<li><a href="?level=63">Bela's Eyes</a> &ndash; los ojos de Lugosi</li>
+		</ul>
 	</section>
 
 	<script>
 		$(function(){
-			YONOCOSM.addSet("set_og",{"topLevel": 72,"dimensions": 150});
-			YONOCOSM.init({"displayDepth":4, "setId":"set_og"});
+			let urlParams = new URLSearchParams(window.location.search),
+				pilevel = urlParams.get("level"),
+				pddepth = urlParams.get("depth") || 4,
+				psetid = urlParams.get("setid") || "set_og",
+				ptoplevel = urlParams.get("toplevel") || 72;
+
+			YONOCOSM.addSet(psetid, {"topLevel": ptoplevel,"dimensions": 150});
+			YONOCOSM.init({"displayDepth":pddepth, "setId":psetid});
 			$("#slideshow_button").on("click", function(){
 				YONOCOSM.clearAllViews();
 				YONOCOSM.displaySlideshowOfLevels();
@@ -53,12 +70,12 @@
 			});
 			$("#interactivelevel_button").on("click", function(){
 				YONOCOSM.clearAllViews();
-				YONOCOSM.displayInteractiveLevel();
+				YONOCOSM.displayInteractiveLevel(pddepth, parseInt(pilevel)-1);
 			});
 
 			// initial display on page
 			YONOCOSM.clearAllViews();
-			YONOCOSM.displayInteractiveLevel();
+			YONOCOSM.displayInteractiveLevel(pddepth, parseInt(pilevel)-1);
 		});
 	</script>
 </body>
