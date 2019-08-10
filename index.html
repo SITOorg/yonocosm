@@ -24,21 +24,19 @@
 	</section>
 	<section id="credits">
 		<h1>About Yonocosm</h1>
-		<p>Yonocosm is a sequence of images that fit together in a novel tiling pattern. Each image in the sequence is drawn specifically to extend the previous image by fitting into a gap created by splitting the "parent" in half horizontally as well as vertically. The results are tiled in a display that allows each quarter image to blend into its neighbors seamlessly. It could be described as an expanding nested tessellation.</p>
-		<p>Yonocosm was created and is being drawn and developed by 
+		<p>
+			Yonocosm is a sequence of images that fit together in a radiating tiling pattern. Each image in the sequence is drawn specifically to extend the previous one by fitting into a gap created by splitting the "parent" in half horizontally as well as vertically. The results are tiled in a display that allows each quarter image to blend into its neighbors seamlessly. It could be described as an expanding nested tessellation.
+		</p>
+		<p>
+			This project was created and is being drawn and developed by 
 			<a href="https://twitter.com/Starstew">Ed Stastny</a>.
-			The name "Yonocosm" is a portmanteau of the names of the 
-			<a href="//sito.org/yono">Yono</a> and <a href="//sito.org/synergy/gridcosm">Gridcosm</a> cooperative art projects
-			on <a href="//sito.org">SITO.org</a>. "Yono" because of the splitting/filling, and "Gridcosm" due to the non-branching single point of focus.</p>
-		<p>Yonocosm may some day become a cooperative art project too. The code is being structured in a way to make it easy to slot in new sets and sizes of images.</p>
+		</p>
 	</section>
 	<section id="landmarks">
 		<h1>Landmarks</h1>
 		<ul>
 			<li><a href="?level=16">"It's a leaf..."</a> &ndash; first leaf</li>
-			<li><a href="?level=28">UWI</a> &ndash; SITO co-inspirator</li>
 			<li><a href="?level=58">Rex</a> &ndash; Ed's Dad</li>
-			<li><a href="?level=63">Bela's Eyes</a> &ndash; los ojos de Lugosi</li>
 		</ul>
 	</section>
 
@@ -48,7 +46,7 @@
 				pilevel = urlParams.get("level"),
 				pddepth = urlParams.get("depth") || 4,
 				psetid = urlParams.get("setid") || "set_og",
-				ptoplevel = urlParams.get("toplevel") || 81;
+				ptoplevel = urlParams.get("toplevel") || 82;
 
 			YONOCOSM.addSet(psetid, {"topLevel": ptoplevel,"dimensions": 150});
 			YONOCOSM.init({"displayDepth":pddepth, "setId":psetid});
