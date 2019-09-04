@@ -13,7 +13,16 @@ body {
 	transition: opacity 250ms;
 }
 .quadcell.highlightCell {
-	opacity: .5;
+	-webkit-animation: 3s ease 0s normal forwards 1 fadein;
+	animation: 3s ease 0s normal forwards 1 fadein;
+}
+@keyframes fadein{
+	0% { opacity:0.5; }
+	100% { opacity:1; }
+}
+@-webkit-keyframes fadein{
+	0% { opacity:0.5; }
+	100% { opacity:1; }
 }
 .ne .quadcell {
 	background-position: 100% 0;
